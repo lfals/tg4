@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
+import { CommissionService } from './commission.service';
 
-@Controller('commission')
-export class CommissionController {}
+@Controller('calcula-comissao')
+export class CommissionController {
+  constructor(private readonly commissionService: CommissionService) {}
+
+  @Post()
+  getHello() {
+    return this.commissionService.getHello();
+  }
+}
