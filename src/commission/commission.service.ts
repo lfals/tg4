@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { commission } from 'src/helpers';
+import { commissionCalculator, goalCommissionCalculator } from 'src/helpers';
 
 @Injectable()
 export class CommissionService {
   getCommissions(sales: ISales) {
     const pedidos = sales.pedidos;
 
-    pedidos.forEach((element) => {
-      element.mes = element.data.split('-')[1];
-      element.comissao = commission(element.valor).toFixed(2);
+    pedidos.forEach((sale) => {
+      sale.mes = sale.data.split('-')[1];
+      sale.comissao = commissionCalculator(sale.valor).toFixed(2);
     });
 
     const comissoes = [];
-    pedidos.forEach(({ vendedor, data, valor, mes, comissao }, i) => {
+
+    pedidos.forEach(({ vendedor, valor, mes, comissao }) => {
       if (!comissoes[vendedor]) {
         comissoes[vendedor] = { vendedor };
       }
@@ -36,32 +37,50 @@ export class CommissionService {
 
     salesByVendorByMonth.forEach((seller) => {
       const value = {};
+      const sum = {};
+      const month = [];
 
       seller.vendas.map((sale) => {
-        if (value.hasOwnProperty(sale.mes)) {
-          value[sale.mes] = value[sale.mes] + sale.comissao;
-        } else {
+        let soma = 1;
+        if (month.indexOf(sale.mes) == -1) {
+          month.push(sale.mes);
+          sale.soma = soma;
           value[sale.mes] = sale.comissao;
+          sum[sale.mes] = sale.soma;
+        } else {
+          sum[sale.mes] = sum[sale.mes] + soma;
+          value[sale.mes] = value[sale.mes] + sale.comissao;
         }
       });
 
-      const salesArray = [];
+      const sales = [];
 
       for (var mes in value) {
-        salesArray.push({ mes: mes, comissao: value[mes] });
+        sales.push({
+          comissao: value[mes],
+          mes,
+          vendas: sum[mes],
+        });
       }
 
-      salesBySeller.push({ vendedor: seller.vendedor, salesArray });
+      salesBySeller.push({
+        vendedor: seller.vendedor,
+        sales,
+      });
     });
 
     const allComissions = [];
 
     salesBySeller.forEach((element) => {
-      element.salesArray.map((sale) => {
+      element.sales.map((sale) => {
         const response = {
           vendedor: element.vendedor,
           mes: sale.mes,
-          valor: sale.comissao,
+          valor: goalCommissionCalculator(
+            sale.mes,
+            sale.vendas,
+            sale.comissao,
+          ).toFixed(2),
         };
         allComissions.push(response);
       });
