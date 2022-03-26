@@ -1,4 +1,4 @@
-const commission = (value) => {
+const commissionCalculator = (value) => {
   if (value <= 300) {
     return value + value * 0.01;
   } else if (value > 300 && value < 1000) {
@@ -8,4 +8,4 @@ const commission = (value) => {
   }
 };
 
-export default commission;
+export default commissionCalculator;

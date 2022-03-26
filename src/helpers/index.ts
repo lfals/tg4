@@ -1,3 +1,4 @@
-import commission from './commission.helper';
+import commissionCalculator from './commission.helper';
+import goalCommissionCalculator from './goal.comission.calculator.helper';
 
-export { commission };
+export { commissionCalculator, goalCommissionCalculator };
