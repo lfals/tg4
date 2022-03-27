@@ -5,32 +5,80 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Teste técnico TG4 - NodeJS
 
-## Description
+## Descrição da API
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1 - A API precisa calcular a comissao que um vendedor deve receber, segundo a
+seguinte regra:
 
-## Installation
+```text
+  - 1% para vendas até 300 reais
+  - 3% para vendas entre 300 e 1000 reais
+  - 5% para vendas acima de 1000 reais
+  - O vendedor receberá um adicional por atingimento de META. Se tiver atingido a meta do mês o vendedor ganha mais 3%. As metas são referentes a quantidade de vendas e estão abaixo:
 
-```bash
-$ npm install
 ```
+
+```js
+const metas = [
+  { mes: 1, qtd: 5 },
+  { mes: 2, qtd: 3 },
+  { mes: 3, qtd: 2 },
+  { mes: 4, qtd: 2 },
+  { mes: 5, qtd: 5 },
+  { mes: 6, qtd: 60 },
+  { mes: 8, qtd: 2 },
+  { mes: 9, qtd: 4 },
+  { mes: 10, qtd: 4 },
+  { mes: 11, qtd: 7 },
+  { mes: 12, qtd: 2 },
+];
+```
+
+O método vai receber um array de pedidos, através de um POST, exemplo:
+
+    POST api/calcula-comissao
+
+```json
+{
+  "pedidos": [
+    { "vendedor": 1, "data": "2022-03-01", "valor": 500.34 },
+    { "vendedor": 1, "data": "2022-03-01", "valor": 1000.22 },
+    { "vendedor": 1, "data": "2022-03-01", "valor": 100.35 },
+    { "vendedor": 1, "data": "2022-03-01", "valor": 22.34 },
+    { "vendedor": 1, "data": "2022-04-01", "valor": 5000.34 },
+    { "vendedor": 2, "data": "2022-03-01", "valor": 2000.34 },
+    { "vendedor": 2, "data": "2022-04-01", "valor": 3000.34 }
+  ]
+}
+```
+
+e o response será a comissao de cada vendedor em cada mes (xx,xx será na verdade o valor calculado):
+
+```json
+{
+  [
+    { "vendedor": 1, "mes": 3, "valor": "xx,xx" },
+    { "vendedor": 2, "mes": 4, "valor": "xx,xx" }
+  ]
+}
+```
+
+## FIY
+
+    levei em consideração a seguinte lógica:
+    vendas < 300 - 1%
+    300 <= vendas < 1000 - 3%
+    vendas > 1000 - 5%
+
+    E a comissão bonus calculada em cima do somatório das comissões
+
+    O valor da comissão retornada no post é apenas da comissão e não do valor mais comissão. Ex
+
+    RS1000
+    comissão = 1050
+    Valor retornado= 50
 
 ## Running the app
 
@@ -57,17 +105,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
