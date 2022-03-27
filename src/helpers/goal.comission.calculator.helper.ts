@@ -1,4 +1,4 @@
-import { goals } from 'src/docs';
+import { goals } from '../docs';
 
 const goalCommissionCalculator = (date, amount, value) => {
   let newValue = value;

@@ -4,7 +4,7 @@ import {
   getCommissionTotal,
   groupSalesByMonthBySeller,
   groupSalesBySeller,
-} from 'src/helpers';
+} from '../helpers';
 
 @Injectable()
 export class CommissionService {
