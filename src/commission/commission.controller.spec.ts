@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CommissionController } from './commission.controller';
 import { CommissionService } from './commission.service';
 
-describe('CommissionController', () => {
+describe('Commission', () => {
   let commissionController: CommissionController;
   let commissionService: CommissionService;
 
@@ -12,7 +12,7 @@ describe('CommissionController', () => {
   });
 
   describe('Commission calculator', () => {
-    it('Vendedor deve receber bonus se atingir a meta', () => {
+    it('Seller should receive bonus if reaching a goal', () => {
       const fakeInput = {
         pedidos: [
           { vendedor: 1, data: '2022-03-01', valor: 100.0 },
@@ -30,7 +30,7 @@ describe('CommissionController', () => {
       ]);
     });
 
-    it('Vendedor não deve receber bonus se atingir a meta', () => {
+    it('Seller should not receive bonus if reaching goal', () => {
       const fakeInput = {
         pedidos: [{ vendedor: 1, data: '2022-03-01', valor: 100.0 }],
       };
@@ -44,7 +44,7 @@ describe('CommissionController', () => {
       ]);
     });
 
-    it('Vendedor deve receber comissao segundo a faixa', () => {
+    it('Seller must receive order according to range', () => {
       const fakeInput = {
         pedidos: [{ vendedor: 1, data: '2022-03-01', valor: 1000.0 }],
       };
@@ -53,7 +53,7 @@ describe('CommissionController', () => {
         {
           vendedor: 1,
           mes: '03',
-          valor: '30.00',
+          valor: '50.00',
         },
       ]);
     });
