@@ -70,7 +70,7 @@ e o response será a comissao de cada vendedor em cada mes (xx,xx será na verda
     levei em consideração a seguinte lógica:
     vendas < 300 - 1%
     300 <= vendas < 1000 - 3%
-    vendas > 1000 - 5%
+    vendas >= 1000 - 5%
 
     E a comissão bonus calculada em cima do somatório das comissões
 
