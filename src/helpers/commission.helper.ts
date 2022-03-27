@@ -3,7 +3,7 @@ const commissionCalculator = (value) => {
     return value * 0.01;
   } else if (value > 300 && value < 1000) {
     return value * 0.03;
-  } else if (value > 1000) {
+  } else if (value >= 1000) {
     return value * 0.05;
   }
 };
